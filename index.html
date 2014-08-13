@@ -1,0 +1,35 @@
+<html>
+    <body>
+        <x-foo>aaa</x-foo>
+    </body>
+    <script>
+        var xFooProto = Object.create(HTMLElement.prototype, {
+            createdCallback: {
+                value: function() {
+                    this.foo();
+
+                    this.addEventListener('click', function(e) {
+                        this.innerHTML = 'clicked!';
+                    });
+                }
+            },
+            enteredViewCallback: {
+                value: function() {
+                    this.foo();
+                }
+            }
+        });
+
+        xFooProto.foo = function() {
+            console.log('This is the foo function.');
+        }
+
+        Object.defineProperty(xFooProto, 'bar', {value: 10});
+
+        var xFoo = document.registerElement('x-foo', {prototype: xFooProto});
+
+        var xfoo = document.createElement('x-foo');
+
+        document.body.appendChild(xfoo);
+    </script>
+</html>
